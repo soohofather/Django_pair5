@@ -1,11 +1,35 @@
 {% extends 'base.html' %}
+{% load django_bootstrap5 %}
 
 {% block body %}
-
-<h1>디테일 페이지</h1><hr>
-
-<h1>{{ review.title }}</h1>
+<hr>
+<p class='text-end'>작성시간: {{ review.created_at }}</p>
+<p class='text-end'>리뷰 영화: {{ review.movie_name }}</p>
+<p class='text-end'>평점: {{ review.grade }}</p>
+<h1 class='text-center'>{{ review.title }}</h1>
 <p>{{ review.content }}<p>
-
+<div class='text-end'>
+  <a class='btn btn-outline-success btn-sm' href="{% url 'reviews:update' review.pk %}">수정</a>
+  <a class='btn btn-outline-danger btn-sm' href="{% url 'reviews:delete' review.pk %}">삭제</a>
+</div>
+<hr>
+{% if request.user.is_authenticated %}
+  <form action="{% url 'reviews:c_create' review.pk %}" method="POST">
+    {% csrf_token %}
+    {% bootstrap_form comment_form layout="inline" %}
+    {% bootstrap_button button_type="submit" content="댓글작성" %}
+  </form>
+{% endif %}
+<h3 class='text-center'>댓글 목록</h3>
+<hr>
+{% for comment in comments %}
+  <p>{{ comment.user }}  |  {{ comment.created_at }}  |  {{ comment.content }}  |  
+    {% if request.user.is_authenticated %}
+      {% if request.user == comment.user%}
+        <a href="{% url 'reviews:c_delete' review.pk comment.pk %}">삭제</a>
+      {% endif %}
+    {% endif %}
+  </p>
+{% endfor %}
 
 {% endblock body %}
