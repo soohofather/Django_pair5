@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 # 회원가입 form import
-from .forms import CustomUserCreationForm 
+from .forms import CustomUserCreationForm, CustomUserChangeForm 
 from django.contrib.auth import get_user_model
 # login, logout 내장 form import
 from django.contrib.auth import login as auth_login
@@ -58,6 +58,25 @@ def logout(request):
     auth_logout(request)
     messages.warning(request, '로그아웃 하였습니다.')
     return redirect('accounts:index')
+  
+@login_required
+def update(request):
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:detail', request.user.pk)
+    else:
+        form = CustomUserChangeForm(instance=request.user)
+    context = {
+        'form': form,
+    }
+    return render(request, 'accounts/update.html', context)
+  
+def withdraw(request, pk):
+    get_user_model().objects.get(id=pk).delete()
+    return redirect("accounts:index")
+  
   
 def follow(request, pk):
     # 프로필에 해당하는 유저를 로그인한 유저가!
