@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<hr>
+<div class='text-end'>
+  <a class='btn btn-primary' href="{% url 'reviews:create' %}">글쓰기</a>
+</div>
+
+<div class='d-flex align-content-around justify-content-between flex-wrap my-3'>
+  {% for review in reviews %}
+  <div class="card my-2" style="width: 16rem;">
+    <img src="https://picsum.photos/200/150" class="card-img-top" alt="imagefile">
+    <div class="card-body">
+      <div class='fs-6 text-end'>
+        <p class="card-text">No.{{ review.pk }}</p>
+      </div>
+      <div class='my-4'>
+        <h4 class="card-title"><a href="{% url 'reviews:detail' review.pk %}">{{ review.title }}</a></h4>
+      </div>
+      <div>
+        <a href="#" class="btn btn-outline-danger">좋아요♥</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<hr>
+
+{% endblock body %}
