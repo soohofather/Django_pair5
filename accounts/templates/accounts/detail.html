@@ -1,17 +1,47 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% block body %}
+<div class="row my-4">
+  <div class="col-6 d-flex justify-content-start align-items-center">
+      <h1 class="m-0 mx-3">{{ user.username }}</h1>
+        {% if request.user != user %}
+        <p class="m-0 mx-1">
+          <a class="btn btn-primary text-decoration-none" href="{% url 'accounts:follow' user.pk %}">
+              {% if request.user in user.followers.all %}
+              팔로우 취소
+              {% else %}
+              팔로우
+              {% endif %}
+          </a>
+        </p>
+        {% endif %}
+      </div>
+      {% if request.user == user %}
+      <p class="m-0 mx-1"><a class="btn btn-outline-dark text-decoration-none" href="{% url 'accounts:update' %}" role="button">프로필수정</a></p>    
+      <p class="m-0 mx-1"><a class="btn btn-outline-danger text-decoration-none" href="{% url 'accounts:withdraw' user.pk %}" role="button">회원탈퇴</a></p>
+      {% endif %}
+  </div>
+</div>
 
-<h1>{{ user.username }}님의 프로필</h1>
-<p>{{ user.email }} | {{ user.full_name }}</p>
-<p>팔로우 : {{ user.followings.count }} | 팔로워 : {{ user.followers.count }}</p>
-{% if request.user != user %}
-<a href="{% url 'accounts:follow' user.pk %}">
-    {% if request.user in user.followers.all %}
-        팔로우 취소
-    {% else %}
-        팔로우
+  <div class="row my-4">
+    <div class="col-6 d-flex justify-content-start mx-4">
+      <p>팔로우 : {{ user.followings.count }} | 팔로워 : {{ user.followers.count }}</p>
+    </div>
+  </div>
+
+{% comment %} <div class="row">
+  <div class="col-6 d-flex justify-content-start mx-4">
+    {% if request.user != user %}
+    <a href="{% url 'accounts:follow' user.pk %}">
+        {% if request.user in user.followers.all %}
+            팔로우 취소
+        {% else %}
+            팔로우
+        {% endif %}
+    </a>
     {% endif %}
-</a>
-{% endif %}
+  </div>
+</div> {% endcomment %}
+
+
 {% endblock body %}
