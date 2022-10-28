@@ -1,11 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
 # 회원가입 form import
-
-
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-
-
 from django.contrib.auth import get_user_model
 
 # login, logout 내장 form import
@@ -17,7 +13,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
 # 메시지알림
-from django.contrib import messages, auth
+from django.contrib import messages
 
 # 로그인되어야지만 들어가지게 설정
 from django.contrib.auth.decorators import login_required
@@ -42,7 +38,6 @@ def signup(request):
         if form.is_valid():
             user = form.save()  # ModelForm의 save 메서드의 리턴값은 해당 모델의 인스턴스다!
             auth_login(request, user)  # 로그인
-
             messages.success(request, "회원가입이 되었습니다.")
             return redirect("accounts:login")
 
@@ -72,7 +67,6 @@ def login(request):
 
 def logout(request):
     auth_logout(request)
-
     messages.warning(request, "로그아웃 하였습니다.")
     return redirect("reviews:index")
 

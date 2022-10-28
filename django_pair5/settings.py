@@ -123,6 +123,10 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 MEDIA_ROOT = BASE_DIR / "static" / "images"
 MEDIA_URL = "/media/"
 
@@ -132,3 +136,5 @@ MEDIA_URL = "/media/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "accounts.User"  # usermodel 설정
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
