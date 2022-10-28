@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
 # 회원가입 form import
-
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-
 from django.contrib.auth import get_user_model
 
 # login, logout 내장 form import
