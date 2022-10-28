@@ -20,7 +20,7 @@ def index(request):
 def create(request):
 
     if request.method == "POST":
-        review_form = ReviewForm(request.POST)
+        review_form = ReviewForm(request.POST, request.FILES)
         if review_form.is_valid():
             review = review_form.save(commit=False)
             review.user = request.user
@@ -64,7 +64,7 @@ def update(request, pk):
     review = Review.objects.get(pk=pk)
 
     if request.method == "POST":
-        review_form = ReviewForm(request.POST, instance=review)
+        review_form = ReviewForm(request.POST, request.FILES, instance=review)
         if review_form.is_valid():
             review_form.save()
             return redirect("reviews:detail", pk)
