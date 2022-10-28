@@ -8,6 +8,11 @@
 <p class='text-end'>평점: {{ review.grade }}</p>
 <h1 class='text-center'>{{ review.title }}</h1>
 <p>{{ review.content }}<p>
+{% if review.image %}
+<div class='text-center'>
+  <img src="{{ review.image.url }}" alt="{{ review.image }}">
+</div>
+{% endif %}
 <div class='text-end'>
   <a class='btn btn-outline-success btn-sm' href="{% url 'reviews:update' review.pk %}">수정</a>
   <a class='btn btn-outline-danger btn-sm' href="{% url 'reviews:delete' review.pk %}">삭제</a>
