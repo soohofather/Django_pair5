@@ -4,6 +4,7 @@
 <div class="row my-4">
   <div class="col-6 d-flex justify-content-start align-items-center">
       <h1 class="m-0 mx-3">{{ user.username }}</h1>
+      <h3>{{ user.last_name }} {{ user.first_name }}</h3>
       {% if user.image %}
       <img src="{{ user.image.url }}" alt="{{ user.image }}" width="400" height="300">
       {% endif %}
@@ -27,11 +28,35 @@
   </div>
 </div>
 
-  <div class="row my-4">
-    <div class="col-6 d-flex justify-content-start mx-4">
-      <p>팔로우 : {{ user.followings.count }} | 팔로워 : {{ user.followers.count }}</p>
-    </div>
+<div class="row my-4">
+  <div class="col-6 d-flex justify-content-start mx-4">
+    <p>팔로우 : {{ user.followings.count }} | 팔로워 : {{ user.followers.count }}</p>
   </div>
+</div>
+
+<div class="row">
+  <div class="col-6">
+      <h3>작성한 글</h3>
+      <p class="text-muted">{{ user.review_set.count }}개를 작성하였습니다.</p>
+      {% for review in user.review_set.all %}
+      <p>
+          {{ forloop.counter }}
+          <a href="{% url 'reviews:detail' review.pk %}">{{ review.title }}</a>
+      </p>
+      {% endfor %}
+  </div>
+  <div class="col-6">
+      <h3>작성한 댓글</h3>
+      <p class="text-muted">{{ user.comment_set.count }}개를 작성하였습니다.</p>
+      {% for comment in user.comment_set.all %}
+      <p>
+          {{ forloop.counter }}
+          <a href="{% url 'reviews:detail' comment.review_id %}">{{ comment.content }}</a>
+      </p>
+      {% endfor %}
+  </div>
+</div>
+
 
 {% comment %} <div class="row">
   <div class="col-6 d-flex justify-content-start mx-4">
