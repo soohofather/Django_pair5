@@ -10,8 +10,12 @@
 
 <div class='d-flex align-content-around justify-content-between flex-wrap my-3'>
   {% for review in reviews %}
-  <div class="card my-2" style="width: 14rem;">
-    <img src="https://picsum.photos/200/150" class="card-img-top" alt="imagefile">
+  <div class="card my-2" style="width: 14rem; ">
+    {% if review.image %}
+      <img src="{{ review.image.url }}" class="card-img-top" alt="{{ review.image }}">
+    {% else %}
+      <img src="https://picsum.photos/200/150" class="card-img-top" alt="imagefile">
+    {% endif %}
     <div class="card-body">
       <div class='d-flex justify-content-between'>
           <p class="card-text"><a href="{% url 'accounts:detail' review.user.pk %}">{{ review.user }}</a></p>

@@ -10,6 +10,7 @@ class ReviewForm(forms.ModelForm):
             "content",
             "movie_name",
             "grade",
+            "image",
         }
 
 
