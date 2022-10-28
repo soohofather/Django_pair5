@@ -3,11 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 # 회원가입 form import
 
 
-from .forms import (
-    CustomUserCreationForm,
-    CustomUserChangeForm,
-    CustomPasswordChangeForm,
-)
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 
 from django.contrib.auth import get_user_model
@@ -47,7 +43,7 @@ def signup(request):
             user = form.save()  # ModelForm의 save 메서드의 리턴값은 해당 모델의 인스턴스다!
             auth_login(request, user)  # 로그인
 
-            messages.success(request, '회원가입이 되었습니다.')
+            messages.success(request, "회원가입이 되었습니다.")
             return redirect("accounts:login")
 
     else:
@@ -77,9 +73,9 @@ def login(request):
 def logout(request):
     auth_logout(request)
 
+    messages.warning(request, "로그아웃 하였습니다.")
+    return redirect("reviews:index")
 
-    messages.warning(request, '로그아웃 하였습니다.')
-    return redirect('reviews:index')
 
 @login_required
 def update(request):
@@ -124,10 +120,10 @@ def password_edit(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request, 'Password successfully changed')
-            return redirect('accounts:login')
+            messages.success(request, "Password successfully changed")
+            return redirect("accounts:login")
         else:
-            messages.error(request, 'Password not changed')
+            messages.error(request, "Password not changed")
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'accounts/password.html', {'form':form})
+    return render(request, "accounts/password.html", {"form": form})
