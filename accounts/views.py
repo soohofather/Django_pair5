@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 # 회원가입 form import
 
+
 from .forms import (
     CustomUserCreationForm,
     CustomUserChangeForm,
     CustomPasswordChangeForm,
 )
+
 
 from django.contrib.auth import get_user_model
 
@@ -19,13 +21,14 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
 # 메시지알림
-from django.contrib import messages
+from django.contrib import messages, auth
 
 # 로그인되어야지만 들어가지게 설정
 from django.contrib.auth.decorators import login_required
 
 # 비밀번호 변경
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 # Create your views here.
 
@@ -43,8 +46,10 @@ def signup(request):
         if form.is_valid():
             user = form.save()  # ModelForm의 save 메서드의 리턴값은 해당 모델의 인스턴스다!
             auth_login(request, user)  # 로그인
-            messages.success(request, "회원가입이 되었습니다.")
-            return redirect("reviews:index")
+
+            messages.success(request, '회원가입이 되었습니다.')
+            return redirect("accounts:login")
+
     else:
         form = CustomUserCreationForm()
     context = {"form": form}
@@ -72,9 +77,9 @@ def login(request):
 def logout(request):
     auth_logout(request)
 
-    messages.warning(request, "로그아웃 하였습니다.")
-    return redirect("reviews:index")
 
+    messages.warning(request, '로그아웃 하였습니다.')
+    return redirect('reviews:index')
 
 @login_required
 def update(request):
@@ -114,17 +119,15 @@ def follow(request, pk):
 @login_required
 def password_edit(request):
     if request.method == "POST":
-        password_change_form = CustomPasswordChangeForm(request.POST)
-        if password_change_form.is_valid():
-            user = password_change_form.save()
-            update_session_auth_hash(request, user)
-            messages.success(request, "비밀번호를 성공적으로 변경하였습니다.")
-            return redirect("reviews:index")
-    else:
-        password_change_form = CustomPasswordChangeForm(request.POST)
 
-    return render(
-        request,
-        "accounts/password.html",
-        {"password_change_form": password_change_form},
-    )
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Password successfully changed')
+            return redirect('accounts:login')
+        else:
+            messages.error(request, 'Password not changed')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'accounts/password.html', {'form':form})
