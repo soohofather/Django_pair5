@@ -2,7 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 # 회원가입 form import
 
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+
+from .forms import (
+    CustomUserCreationForm,
+    CustomUserChangeForm,
+    CustomPasswordChangeForm,
+)
+
 
 from django.contrib.auth import get_user_model
 
@@ -40,8 +46,10 @@ def signup(request):
         if form.is_valid():
             user = form.save()  # ModelForm의 save 메서드의 리턴값은 해당 모델의 인스턴스다!
             auth_login(request, user)  # 로그인
+
             messages.success(request, '회원가입이 되었습니다.')
             return redirect("accounts:login")
+
     else:
         form = CustomUserCreationForm()
     context = {"form": form}
@@ -69,27 +77,29 @@ def login(request):
 def logout(request):
     auth_logout(request)
 
+
     messages.warning(request, '로그아웃 하였습니다.')
     return redirect('reviews:index')
-  
+
 @login_required
 def update(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CustomUserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('accounts:detail', request.user.pk)
+            return redirect("accounts:detail", request.user.pk)
     else:
         form = CustomUserChangeForm(instance=request.user)
     context = {
-        'form': form,
+        "form": form,
     }
-    return render(request, 'accounts/update.html', context)
-  
+    return render(request, "accounts/update.html", context)
+
+
 def withdraw(request, pk):
     get_user_model().objects.get(id=pk).delete()
     return redirect("accounts:index")
-  
+
 
 def follow(request, pk):
     # 프로필에 해당하는 유저를 로그인한 유저가!
@@ -109,6 +119,7 @@ def follow(request, pk):
 @login_required
 def password_edit(request):
     if request.method == "POST":
+
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
