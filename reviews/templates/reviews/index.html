@@ -11,7 +11,7 @@
 
 <div class='d-flex align-content-around justify-content-between flex-wrap my-2'>
   {% for review in reviews %}
-  <div class="card my-2" style="width: 14rem; ">
+  <div class="card my-2 border-secondary" style="width: 14rem; ">
     {% if review.image %}
       {% thumbnail "200x167" review.image as thumb %}
       <img src="{{ review.image.url }}" class="card-img-top" alt="{{ review.image }}" height="{{ thumb.height }}">
@@ -20,7 +20,7 @@
     {% endif %}
     <div class="card-body">
       <div class='d-flex justify-content-between'>
-          <p class="card-text"><a href="{% url 'accounts:detail' review.user.pk %}">{{ review.user }}</a></p>
+          <p class="card-text fw-bold">{{ review.user }}</p>
           <p class="card-text">No.{{ review.pk }}</p>
       </div>
       <div class='py-3'>

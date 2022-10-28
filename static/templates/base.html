@@ -11,10 +11,10 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+  <nav class="navbar navbar-expand-sm navbar-dark bg-success bg-opacity-75" style='height: 3.5rem'>
     <div class="container">
 
-      <a class="navbar-brand" href="{% url 'reviews:index' %}"><img
+      <a class="navbar-brand" href="{% url 'index:index' %}"><img
             class="img-fluid mx-1"
             style="height: 60px"
             src="{% static "/logo.png" %}"
@@ -33,13 +33,13 @@
         <ul class="navbar-nav">
           {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts:detail' request.user.pk %}">{{ request.user }}님, 환영합니다^^</a>
+            <a class="nav-link">{{ request.user }}님, 환영합니다^^</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts:logout' %}">로그아웃</a>
+            <a class="nav-link active" href="{% url 'accounts:logout' %}">로그아웃</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts:detail' request.user.pk %}">회원정보</a>
+            <a class="nav-link active" href="{% url 'accounts:detail' request.user.pk %}">회원정보</a>
           </li>
           {% else %}
           <li class="nav-item">
