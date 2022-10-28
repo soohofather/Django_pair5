@@ -99,3 +99,15 @@ def c_delete(request, a_pk, c_pk):
     comment.delete()
 
     return redirect("reviews:detail", a_pk)
+
+
+def like(request, pk):
+
+    review = Review.objects.get(pk=pk)
+
+    if request.user in review.like_users.all():
+        review.like_users.remove(request.user)
+    else:
+        review.like_users.add(request.user)
+
+    return redirect("reviews:index")

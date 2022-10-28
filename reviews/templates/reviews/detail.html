@@ -13,9 +13,9 @@
   <img src="{{ review.image.url }}" alt="{{ review.image }}">
 </div>
 {% endif %}
-<div class='text-end'>
-  <a class='btn btn-outline-success btn-sm' href="{% url 'reviews:update' review.pk %}">수정</a>
-  <a class='btn btn-outline-danger btn-sm' href="{% url 'reviews:delete' review.pk %}">삭제</a>
+<div class='d-grid gap-2 my-4'>
+  <a class='btn btn-outline-success btn-sm' href="{% url 'reviews:update' review.pk %}">수정하기</a>
+  <a class='btn btn-outline-danger btn-sm' href="{% url 'reviews:delete' review.pk %}">삭제하기</a>
 </div>
 <hr>
 {% if request.user.is_authenticated %}

@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
 # Create your models here.
 
@@ -15,7 +17,16 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    image = models.ImageField(blank=True, upload_to="images/")
+    image = ProcessedImageField(
+        blank=True,
+        upload_to="images/",
+        processors=[ResizeToFill(400, 300)],
+        format="JPEG",
+        options={"quality": 80},
+    )
+    like_users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="like_reviews"
+    )
 
 
 class Comment(models.Model):
