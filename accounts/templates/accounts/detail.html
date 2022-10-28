@@ -4,21 +4,25 @@
 <div class="row my-4">
   <div class="col-6 d-flex justify-content-start align-items-center">
       <h1 class="m-0 mx-3">{{ user.username }}</h1>
-        {% if request.user != user %}
-        <p class="m-0 mx-1">
-          <a class="btn btn-primary text-decoration-none" href="{% url 'accounts:follow' user.pk %}">
-              {% if request.user in user.followers.all %}
-              팔로우 취소
-              {% else %}
-              팔로우
-              {% endif %}
-          </a>
-        </p>
-        {% endif %}
+      {% if user.image %}
+      <img src="{{ user.image.url }}" alt="{{ user.image }}" width="400" height="300">
+      {% endif %}
+      {% if request.user != user %}
+      <p class="m-0 mx-1">
+      <a class="btn btn-primary text-decoration-none" href="{% url 'accounts:follow' user.pk %}">
+      {% if request.user in user.followers.all %}
+      팔로우 취소
+      {% else %}
+      팔로우
+      {% endif %}
+      </a>
+      </p>
+      {% endif %}
       </div>
-      {% if request.user == user %}
-      <p class="m-0 mx-1"><a class="btn btn-outline-dark text-decoration-none" href="{% url 'accounts:update' %}" role="button">프로필수정</a></p>    
-      <p class="m-0 mx-1"><a class="btn btn-outline-danger text-decoration-none" href="{% url 'accounts:withdraw' user.pk %}" role="button">회원탈퇴</a></p>
+      {% if request.user == user %}     
+      <a class="btn btn-outline-dark text-decoration-none" href="{% url 'accounts:update' %}" role="button">프로필수정</a>
+      <a class="btn btn-outline-dark text-decoration-none" href="{% url 'accounts:password_edit' %}" role="button">비밀번호변경</a>
+      <a class="btn btn-outline-danger text-decoration-none" href="{% url 'accounts:withdraw' user.pk %}" role="button">회원탈퇴</a>
       {% endif %}
   </div>
 </div>

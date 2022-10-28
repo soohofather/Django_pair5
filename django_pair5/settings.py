@@ -123,8 +123,6 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-
-# 이미지 업로드
 MEDIA_ROOT = BASE_DIR / "static" / "images"
 MEDIA_URL = "/media/"
 

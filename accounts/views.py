@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 # 회원가입 form import
 
-from .forms import CustomUserCreationForm, CustomUserChangeForm 
+from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm
 
 from django.contrib.auth import get_user_model
 
@@ -20,6 +20,9 @@ from django.contrib import messages
 # 로그인되어야지만 들어가지게 설정
 from django.contrib.auth.decorators import login_required
 
+# 비밀번호 변경
+from django.contrib.auth import update_session_auth_hash
+
 # Create your views here.
 
 
@@ -32,10 +35,11 @@ def index(request):
 
 def signup(request):
     if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()  # ModelForm의 save 메서드의 리턴값은 해당 모델의 인스턴스다!
             auth_login(request, user)  # 로그인
+            messages.success(request, '회원가입이 되었습니다.')
             return redirect("reviews:index")
     else:
         form = CustomUserCreationForm()
@@ -99,3 +103,17 @@ def follow(request, pk):
         # 팔로우 상태가 아니면, '팔로우'를 누르면 추가 (add)
         user.followers.add(request.user)
     return redirect("accounts:detail", pk)
+
+@login_required
+def password_edit(request):
+    if request.method == 'POST':
+        password_change_form = CustomPasswordChangeForm(request.POST)
+        if password_change_form.is_valid():
+            user = password_change_form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "비밀번호를 성공적으로 변경하였습니다.")
+            return redirect('reviews:index')
+    else:
+        password_change_form = CustomPasswordChangeForm(request.POST)
+
+    return render(request, 'accounts/password.html', {'password_change_form':password_change_form})
